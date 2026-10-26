@@ -5,7 +5,7 @@ Source material for breaking down and editing the VSL. Nothing here has been edi
 | Folder | What goes in it |
 | --- | --- |
 | [`01-vsls/`](01-vsls/) | The VSL running right now (`current-vsl/`) and example VSLs to learn from (`reference-vsls/`) |
-| [`02-results-and-b-roll/`](02-results-and-b-roll/) | Results, testimonials, B-roll, photos and any other context |
+| [`02-results-and-b-roll/`](02-results-and-b-roll/) | Everything else, all in one place: results, testimonials, B-roll, photos, journey pictures, context |
 | [`03-raw-vsl-footage/`](03-raw-vsl-footage/) | The raw, unedited recording of the VSL that needs editing |
 
 ## Uploading
@@ -22,7 +22,7 @@ then click **Publish release**:
 | --- | --- |
 | Current VSL | [releases/new?tag=current-vsl](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=current-vsl&title=Current%20VSL) |
 | Reference VSLs | [releases/new?tag=reference-vsls](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=reference-vsls&title=Reference%20VSLs) |
-| B-roll | [releases/new?tag=b-roll](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=b-roll&title=B-roll) |
+| Results and B-roll | [releases/new?tag=results-and-b-roll](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=results-and-b-roll&title=Results%20and%20B-roll) |
 | Raw VSL footage | [releases/new?tag=raw-vsl-footage](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=raw-vsl-footage&title=Raw%20VSL%20footage) |
 
 To add more videos to a release later, open it under **Releases**, click the pencil (Edit), attach the
