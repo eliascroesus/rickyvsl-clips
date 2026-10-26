@@ -27,6 +27,7 @@ SPECS = {
     "shop_today_2k": ("IMG_0045.PNG", (0, 6, 100, 44), [], [(2, 18, 23, 24.5)], (1000, 860)),
     "shop_payout":   ("IMG_0039.PNG", (0, 24, 100, 100), [], [(5, 88.5, 34, 97)], (900, 860)),
     "shop_laptop_night": ("IMG_8623.HEIC", None, [(9, 37, 18, 39), (10, 38.4, 57.5, 40.1), (53.3, 40.3, 57.7, 42.1)], [], (900, 860)),
+    "night_laptop":  ("IMG_8623.HEIC", None, [(4.5, 35.5, 58, 62.5, 28)], [], (900, 860)),
     "playbuttons_4": ("IMG_3928.HEIC", None, [], [], (900, 860)),
     "playbutton_lv": ("IMG_8301.HEIC", None, [], [], (900, 860)),
     "gwagon":        ("IMG_9974.HEIC", None, [], [], (900, 860)),
@@ -45,8 +46,9 @@ def build(name, spec):
     im = ImageOps.exif_transpose(Image.open(f"{SRC}/{fn}")).convert("RGB")
     W, H = im.size
     for b in blurs:                                  # redact before cropping, in source coordinates
-        x0, y0, x1, y1 = pct_box(b, W, H)
-        region = im.crop((x0, y0, x1, y1)).filter(ImageFilter.GaussianBlur(max(8, (y1 - y0) // 2)))
+        x0, y0, x1, y1 = pct_box(b[:4], W, H)
+        radius = b[4] if len(b) > 4 else max(8, (y1 - y0) // 2)
+        region = im.crop((x0, y0, x1, y1)).filter(ImageFilter.GaussianBlur(radius))
         im.paste(region, (x0, y0))
     cx0, cy0, cx1, cy1 = pct_box(crop, W, H) if crop else (0, 0, W, H)
     im = im.crop((cx0, cy0, cx1, cy1))
