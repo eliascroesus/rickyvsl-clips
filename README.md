@@ -10,9 +10,19 @@ Source material for breaking down and editing the VSL. Nothing here has been edi
 
 ## Uploading
 
-Open a folder on GitHub, click **Add file → Upload files**, drag the files in and click **Commit changes**.
+**Pictures, screenshots and small files (under 25 MB):** open the folder on GitHub, click
+**Add file → Upload files**, drag the files in and click **Commit changes**.
 
-GitHub's website takes files up to **25 MB** each. For anything bigger (most videos):
+**Videos (up to 2 GB each):** these go in a GitHub Release, which takes big files straight from the browser.
+There's one release per folder. Open its link, drag the videos into the box at the bottom
+("Attach binaries"), wait until every file has finished uploading, then click **Publish release**:
 
-- push it with [GitHub Desktop](https://desktop.github.com/) instead, which allows up to 100 MB per file, or
-- put it in Google Drive and paste the share link into a `links.md` file in the folder it belongs to.
+| Videos | Upload link |
+| --- | --- |
+| Current VSL | [releases/new?tag=current-vsl](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=current-vsl&title=Current%20VSL) |
+| Reference VSLs | [releases/new?tag=reference-vsls](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=reference-vsls&title=Reference%20VSLs) |
+| B-roll | [releases/new?tag=b-roll](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=b-roll&title=B-roll) |
+| Raw VSL footage | [releases/new?tag=raw-vsl-footage](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=raw-vsl-footage&title=Raw%20VSL%20footage) |
+
+To add more videos to a release later, open it under **Releases**, click the pencil (Edit), attach the
+files and click **Update release**. Files over 2 GB need to be split or exported smaller first.
