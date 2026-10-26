@@ -14,8 +14,9 @@ Source material for breaking down and editing the VSL. Nothing here has been edi
 **Add file → Upload files**, drag the files in and click **Commit changes**.
 
 **Videos (up to 2 GB each):** these go in a GitHub Release, which takes big files straight from the browser.
-There's one release per folder. Open its link, drag the videos into the box at the bottom
-("Attach binaries"), wait until every file has finished uploading, then click **Publish release**:
+There's one release per folder. Open its link (if GitHub asks about the tag, pick **Create new tag … on publish**),
+drag the videos into the box at the bottom ("Attach binaries"), wait until every file has finished uploading,
+then click **Publish release**:
 
 | Videos | Upload link |
 | --- | --- |
