@@ -4,8 +4,8 @@ Source material for breaking down and editing the VSL. Nothing here has been edi
 
 | Folder | What goes in it |
 | --- | --- |
-| [`01-vsls/`](01-vsls/) | The VSL running right now (`current-vsl/`) and example VSLs to learn from (`reference-vsls/`) |
-| [`02-results-and-b-roll/`](02-results-and-b-roll/) | Everything else, all in one place: results, testimonials, B-roll, photos, journey pictures, context |
+| [`01-vsls/`](01-vsls/) | Ricky's current VSL (`current-vsl/`) and example VSLs to learn from (`reference-vsls/`, broken down in [BREAKDOWN.md](01-vsls/reference-vsls/BREAKDOWN.md)) |
+| [`02-results-and-b-roll/`](02-results-and-b-roll/) | Everything else, all in one place: results, testimonials, B-roll, photos, journey pictures, context (mapped in [ASSET-MAP.md](02-results-and-b-roll/ASSET-MAP.md)) |
 | [`03-raw-vsl-footage/`](03-raw-vsl-footage/) | The raw, unedited recording of the VSL that needs editing |
 
 ## Uploading
