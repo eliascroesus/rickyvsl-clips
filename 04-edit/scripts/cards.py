@@ -9,8 +9,7 @@ import pillow_heif
 
 pillow_heif.register_heif_opener()
 SRC = "/home/user/rickyvsl-clips/02-results-and-b-roll"
-OUT = sys.argv[1] if len(sys.argv) > 1 else "/home/user/work/gfx/cards"
-os.makedirs(OUT, exist_ok=True)
+OUT = sys.argv[1] if __name__ == "__main__" and len(sys.argv) > 1 else "/home/user/work/gfx/cards"
 ACCENT = (169, 112, 255)
 PAD = 70                           # room for the shadow
 
@@ -89,6 +88,7 @@ def build(name, spec):
 
 
 if __name__ == "__main__":
+    os.makedirs(OUT, exist_ok=True)
     meta = {n: build(n, s) for n, s in SPECS.items()}
     json.dump(meta, open(f"{OUT}/cards.json", "w"), indent=1)
     for n, m in meta.items():

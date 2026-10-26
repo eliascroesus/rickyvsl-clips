@@ -17,7 +17,7 @@ WORK = "/home/user/work"
 PROXY = f"{WORK}/edit/proxy1080.mp4"
 VOICE = f"{WORK}/edit/voice_proc.wav"
 CARDS = f"{WORK}/gfx/cards"
-MUSIC = f"{WORK}/music"
+MUSIC = __import__("os").environ.get("VSL_MUSIC", "/home/user/work/music")
 ACCENT_ASS = "&HFF70A9&"           # (169, 112, 255) in ASS BGR
 CARD_META = json.load(open(f"{CARDS}/cards.json"))
 

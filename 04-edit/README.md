@@ -21,3 +21,13 @@ How Ricky's VSL is put together. Nothing in here needs uploading; it's the editi
 
 Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, see
 `03-raw-vsl-footage/TRANSCRIPT.md`), then run `plan.py` and `render.py` again.
+
+## Version 2 (Iman Gadzhi style)
+
+- `scripts/brand.py`: the look. Near-black plate with a purple glow, per-letter blur-in text, headlines over
+  Ricky with a handwritten sub-line (Unbounded + Caveat fonts), framed cards with a glow and slight tilt, photo stickers.
+- `scripts/plan2.py`: the v2 cue sheet (title cards, headlines, results on the plate, photos popping up beside
+  Ricky, screen recordings in glowing frames, phone clips) → `v2/elements.json`, `v2/text.ass`, `v2/edl2.json`.
+- `scripts/compositor.py`: draws the animated graphics frame by frame over the cut footage and burns in the text.
+- `scripts/music2.py` + `scripts/music_cues2.py`: the cinematic fallback score (string-style pads, sub swells, low
+  pulse) and where each part plays. Swap in licensed tracks when available.
