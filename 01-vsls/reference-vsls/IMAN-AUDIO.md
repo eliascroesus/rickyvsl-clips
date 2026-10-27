@@ -67,5 +67,22 @@ pitch bottom to top.
 - A 3.5 s slide down into "what most people don't understand".
 - The hook opens on a held E like his.
 
+## The sound of his bed vs ours (v6 match)
+
+Measured on the voice-free side signal and in his pauses, then matched one by one (`04-edit/scripts/compare_bed.py`):
+
+| What | Iman | Ours before (v5) | Ours now (v6) |
+| --- | --- | --- | --- |
+| Tempo | ~101-103 BPM (beat 0.58-0.59 s) | 115 BPM, felt rushed | 102 BPM |
+| A ticking layer on top | A shaker/hat tick on every 16th (every 0.145 s), panned wide, crisp (20-23 dB gaps), evenly accented | None | Real tambourine, band-passed to just the jingle tick, a different hit in each ear (every 0.145-0.149 s, 23-25 dB gaps) |
+| High strings | Crisp, short, deep gaps between notes (14-18 dB on A5) | Smeared (8-10 dB) | Notes cut to fit their slot, much less reverb on short notes (11-15 dB) |
+| Stereo width | Focused: side 15-20 dB under the centre | Very wide and washy (5 dB) | 12 dB |
+| Top end (side, vs 315-630 Hz) | 2.5 kHz −21, 5 kHz −12, 10 kHz −23 dB | −25 / −37 / −55 (dull) | −21 / −12 / −24 |
+| Deep sub (30-60 Hz) | Felt on the hits | 10 dB too much at first, then matched | Bass drum pitched down under each hit |
+
+The tick is the part you "hear" as tension without noticing it: a clock running under everything. That, the slower
+tempo and the crisp, focused strings are the difference between "violins playing" and his "something is about to
+happen" feel.
+
 A cleaner breakdown (his music fully separated from his voice) needs the Demucs separation model, whose download
 host (`dl.fbaipublicfiles.com`) is blocked in this environment.

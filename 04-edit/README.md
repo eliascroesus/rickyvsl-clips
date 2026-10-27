@@ -63,3 +63,15 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
   chord, a rising staircase into the reveal and a slide down into "what most people don't understand".
 - `scripts/level_score.py`: levels the score per section; the music then sits 2 dB lower than in v4 (`v5/edl5.json`).
 - `scripts/render_chunks.sh`: renders the video in parallel chunks that can be resumed.
+
+## Version 6
+
+- **Score rebuilt to match the sound of Iman's bed** (`scripts/strings_score3.py`, compared with
+  `scripts/compare_bed.py`): 102 BPM, a ticking tambourine layer in 16ths panned wide, crisp short strings with less
+  reverb, a narrower stereo image, a brighter top end and sub under the hits. Findings in
+  `01-vsls/reference-vsls/IMAN-AUDIO.md`. The tambourine comes from VSCO 2 CE's "Miscellania Raw" folder (CC0).
+- **Music about 1 dB louder than v5** (`v6/edl6.json`).
+- **Zooms are smooth now**: every move is a set of keyframes eased in and out (`ZOOMS` in `scripts/plan3.py`), no
+  instant punch-ins or snap-backs; where a move starts or ends wide it crossfades with the footage.
+- **The opening "$87" is a red number on top of Ricky** (top-left, with "IN SALES." under it) instead of its own black
+  page, so you see him lift his phone with the real stats at the same time (`OVERLAY_TITLES` in `scripts/plan3.py`).

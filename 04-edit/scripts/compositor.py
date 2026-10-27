@@ -155,20 +155,24 @@ def ease_in_out(x):
 
 
 class Zoom:
-    """Push-ins and punch-ins on Ricky, cropped from the 4K original so the close-up stays sharp.
+    """Smooth zooms on Ricky, cropped from the 4K original so the close-up stays sharp.
 
-    Each move is {t0, t1, z0, z1, kind}: "push" eases from z0 to z1 over the whole move, "punch" jumps to z0 and creeps
-    to z1. Both cut straight back to the wide shot at t1, which reads as a camera cut. The source is decoded per A-roll
-    piece at 1.2x output size (2304x1296), so no zoom up to 1.2 ever upscales.
+    Each move is a list of keyframes {"keys": [[t, zoom], ...]} (output time) with an ease-in-out between each pair,
+    so it glides in and back out with no jumps. Where the move starts or ends wide, the first and last few frames
+    crossfade with the base footage to hide the switch of source. The source is decoded per A-roll piece at 1.2x
+    output size (2304x1296), so no zoom up to 1.2 ever upscales.
     """
 
     S = 1.2
+    XF = 0.12    # crossfade with the base at a wide start / end (s)
 
     def __init__(self, z, keep, src):
-        self.z, self.src = z, src
+        self.keys = [tuple(k) for k in z["keys"]]
+        self.z = dict(z, t0=self.keys[0][0], t1=self.keys[-1][0])
+        self.src = src
         self.cx, self.cy = z.get("cx", 930), z.get("cy", 590)
         self.pieces, f = [], 0                      # (first output frame, n frames, raw start) per A-roll piece
-        i0, i1 = round(z["t0"] * FPS), round(z["t1"] * FPS)
+        i0, i1 = round(self.z["t0"] * FPS), round(self.z["t1"] * FPS)
         for a, b in keep:
             n = round((b - a) * FPS)
             lo, hi = max(i0, f), min(i1, f + n)
@@ -179,11 +183,16 @@ class Zoom:
         self.sw, self.sh = round(W * self.S), round(H * self.S)
 
     def level(self, t):
-        z = self.z
-        x = (t - z["t0"]) / max(z["t1"] - z["t0"], 1e-3)
-        if z.get("kind") == "punch":
-            return z["z0"] + (z["z1"] - z["z0"]) * clamp(x)
-        return z["z0"] + (z["z1"] - z["z0"]) * ease_in_out(x)
+        for (ta, za), (tb, zb) in zip(self.keys, self.keys[1:]):
+            if ta <= t <= tb:
+                return za + (zb - za) * ease_in_out((t - ta) / max(tb - ta, 1e-3))
+        return self.keys[-1][1]
+
+    def mix(self, t):
+        """How much of the zoomed frame to show (crossfade with the base at a wide start or end)."""
+        a = clamp((t - self.z["t0"]) / self.XF) if self.keys[0][1] == 1.0 else 1.0
+        b = clamp((self.z["t1"] - t) / self.XF) if self.keys[-1][1] == 1.0 else 1.0
+        return min(a, b)
 
     def frame(self, i, t):
         k = next((j for j, (f0, n, _) in enumerate(self.pieces) if f0 <= i < f0 + n), None)
@@ -192,6 +201,7 @@ class Zoom:
         if k != self.cur:
             self.close()
             f0, n, ss = self.pieces[k]
+            ss, n = ss + (i - f0) / FPS, n - (i - f0)          # a render chunk may start partway into a piece
             self.proc = subprocess.Popen(
                 ["ffmpeg", "-v", "error", "-ss", f"{ss:.4f}", "-i", self.src, "-frames:v", str(n),
                  "-vf", f"fps={FPS},scale={self.sw}:{self.sh}:flags=lanczos", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
@@ -287,7 +297,12 @@ def main():
         last = raw
         for z in zooms:
             if z.z["t0"] <= t < z.z["t1"]:
-                raw = z.frame(i, t) or raw
+                zf = z.frame(i, t)
+                if zf:
+                    a = z.mix(t)
+                    if a < 1:
+                        zf = (np.frombuffer(zf, np.uint8) * a + np.frombuffer(raw, np.uint8) * (1 - a)).astype(np.uint8).tobytes()
+                    raw = zf
             elif t >= z.z["t1"]:
                 z.close()
         active = [o for t0, t1, o in objs if t0 <= t < t1]

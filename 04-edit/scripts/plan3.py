@@ -34,21 +34,22 @@ CLIPS = [  # file, t0, t1, in, mode, clip audio dB
     ("IMG_8117.mov", 270.50, 277.00, 3.0, "plate", -16),
 ]
 
-ZOOMS = [  # push-ins / punch-ins on Ricky at the tense lines (raw time): kind, t0, t1, z0, z1
-    ("push", 0.00, 5.70, 1.00, 1.10),      # hook, pushing into "$87"
-    ("punch", 12.30, 14.20, 1.18, 1.22),   # "I was this close to believing them"
-    ("punch", 74.60, 76.32, 1.14, 1.16),   # "The truth is, you don't."
-    ("push", 92.00, 95.30, 1.00, 1.10),    # "...is the one place" into the title card
-    ("push", 114.55, 120.20, 1.00, 1.10),  # "a grown man threatened me at work..."
-    ("punch", 120.20, 121.32, 1.18, 1.20), # "I can't do this anymore"
-    ("punch", 139.75, 142.60, 1.15, 1.18), # "bro, you're falling for the TikTok scams"
-    ("push", 170.90, 173.86, 1.00, 1.12),  # mom: "I don't think you should be doing this anymore"
-    ("push", 183.24, 186.60, 1.00, 1.12),  # "everybody was right about me"
-    ("punch", 188.66, 190.66, 1.17, 1.19), # "please do not click off of this video"
-    ("push", 194.70, 201.70, 1.00, 1.14),  # the one place nobody tried, into "YouTube Shorts"
-    ("push", 279.66, 283.80, 1.00, 1.12),  # "Posting on YouTube Shorts is not what made me that money"
-    ("push", 355.95, 360.30, 1.00, 1.12),  # the guarantee, into "60 DAYS"
+ZOOMS = [  # smooth zooms on Ricky at the tense lines: keyframes (raw time, zoom), eased in and out, no jumps.
+    # A move that ends on a title card holds its zoom until the card fully covers the frame.
+    [(0.00, 1.0), (5.70, 1.10), (8.10, 1.12), (8.95, 1.0)],                    # hook into "$87", held under the $87
+    [(11.80, 1.0), (12.62, 1.16), (13.95, 1.19), (14.80, 1.0)],                # "I was this close to believing them"
+    [(74.40, 1.0), (75.15, 1.13), (75.95, 1.15), (76.85, 1.0)],                # "The truth is, you don't."
+    [(92.00, 1.0), (95.30, 1.10), (95.55, 1.10)],                              # "...is the one place" into the card
+    [(114.55, 1.0), (120.10, 1.09), (120.85, 1.16), (121.30, 1.17), (122.15, 1.0)],  # threatened at work, "I can't do this anymore"
+    [(139.55, 1.0), (140.35, 1.13), (142.35, 1.16), (143.10, 1.0)],            # "bro, you're falling for the TikTok scams"
+    [(170.90, 1.0), (173.60, 1.12), (174.65, 1.0)],                            # mom: "I don't think you should be doing this anymore"
+    [(183.24, 1.0), (186.30, 1.10), (187.30, 1.06), (189.00, 1.15), (190.55, 1.17), (191.30, 1.0)],  # "everybody was right about me", "please do not click off"
+    [(194.70, 1.0), (201.70, 1.14), (201.90, 1.14)],                           # the one place nobody tried, into "YouTube Shorts"
+    [(279.66, 1.0), (283.50, 1.12), (284.35, 1.0)],                            # "Posting on YouTube Shorts is not what made me that money"
+    [(355.95, 1.0), (360.30, 1.12), (360.55, 1.12)],                           # the guarantee, into "60 DAYS"
 ]
+OVERLAY_TITLES = {5.72}   # title cards shown on top of Ricky (red) instead of on their own page
+RED = "&H2E2EFF&"
 ZOOM_SRC = "/home/user/work/src/rickyvslraw.mp4"
 
 SUBS = P2.STYLES.replace(
@@ -107,6 +108,17 @@ def main():
     # ---- title cards (unchanged look); hits come from the music cue sheet
     for T in P2.TITLES:
         t0, t1 = m(T["t0"]), m(T["t1"])
+        if T["t0"] in OVERLAY_TITLES:       # big red number slammed on top of Ricky, beside his head
+            txt = "".join(p for p, _ in T["lines"][0]).rstrip(".")
+            x, y, size = 420, 215, 230     # top-left: his phone with the real stats comes up on the right
+            events.append(ev(3, t0, t1, "Big", f"{{\\pos({x},{y})\\fs{size}\\c&H000000&\\alpha&H70&\\bord16\\3c&H000000&\\blur22"
+                                             f"\\fad(60,150)\\fscx135\\fscy135\\t(0,170,\\fscx100\\fscy100)}}{txt}"))
+            events.append(ev(4, t0, t1, "Big", f"{{\\pos({x},{y})\\fs{size}\\c{RED}\\bord3\\3c&H101010&\\blur1"
+                                             f"\\fad(60,150)\\fscx135\\fscy135\\t(0,170,\\fscx100\\fscy100)}}{txt}"))
+            if T.get("sub"):
+                events.append(ev(4, t0 + 0.25, t1, "Sub", f"{{\\pos({x},{y + size * 0.62:.0f})\\bord3\\3c&H000000&\\blur3\\fad(150,150)}}{T['sub']}"))
+            sfx.append({"name": "whoosh_soft", "at": t0, "db": -17, "lead": 0.2})
+            continue
         plates.append({"t0": t0, "t1": t1, "fade_in": 0.0 if T.get("fade_in") == 0 else 0.12, "fade_out": 0.12})
         hide.append((t0, t1))
         if not T["lines"]:
@@ -233,9 +245,12 @@ def main():
 
     os.makedirs(outdir, exist_ok=True)
     open(f"{outdir}/text.ass", "w").write(SUBS + "\n".join(events) + "\n")
-    zooms = [{"kind": k, "t0": m(a), "t1": m(b), "z0": z0, "z1": z1} for k, a, b, z0, z1 in ZOOMS]
+    zooms = [{"keys": [(m(t), z) for t, z in K]} for K in ZOOMS]
+    covered = [(m(T["t0"]) + 0.12, m(T["t1"])) for T in P2.TITLES if T["t0"] not in OVERLAY_TITLES]
     for z in zooms:
-        assert not any(z["t0"] < m(b) and m(a) < z["t1"] for a, b in SCREEN), z
+        (a0, _), (a1, z1) = z["keys"][0], z["keys"][-1]
+        assert not any(a0 < m(b) and m(a) < a1 for a, b in SCREEN), z
+        assert z1 == 1.0 or any(c0 <= a1 <= c1 for c0, c1 in covered), z     # ends wide, or hidden under a card
     json.dump({"plates": plates, "elements": elements, "zooms": zooms, "keep": keep, "zoom_src": ZOOM_SRC},
               open(f"{outdir}/elements.json", "w"), indent=1)
     edl = {"items": [{"kind": "aroll", "in": a, "out": b} for a, b in keep], "sfx": sfx, "inserts": audio_inserts,
