@@ -39,3 +39,12 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
 - `scripts/music3.py` + `scripts/music_cues3.py`: the tension score modelled on Iman Gadzhi's bed (breakdown in
   `01-vsls/reference-vsls/IMAN-AUDIO.md`): starts on frame 1, hit after the hook, 115 BPM bass pulse, never silent.
 - `scripts/separate.py`, `voice_comb.py`, `gap_music.py`, `analyze_bed.py`: the tools used to study Iman's audio.
+
+## Version 4 audio (real strings)
+
+- `scripts/strings_score.py`: the score played with real recorded strings and percussion from the Versilian Studios
+  Chamber Orchestra 2 Community Edition (VSCO 2 CE, public domain / CC0, https://github.com/sgossner/VSCO-2-CE), so it's
+  safe for ads. A minor, 115 BPM: cello + bass eighth-note ostinato, viola sixteenth ticks, long swelling violin notes,
+  violin tremolo for the hook, timpani rolls into timpani + bass drum + low-string hits.
+- `scripts/vsco_index.py`: indexes the samples and checks each one's real pitch.
+- Video is the same as version 3; only the music and hits changed (`v3/edl4.json`).
