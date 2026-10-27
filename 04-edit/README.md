@@ -155,6 +155,7 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
 
 - Side text with the white fade only on 13 key moments (it was ~30); the rest are word captions again, plus blue
   emphasis lines ("YOU DON'T", "NOT YOUR FAULT", "THE TIKTOK SCAMS", "RIGHT ABOUT ME", "THAT MONEY"...).
+- Word captions back to the smaller size from B (78 px).
 - Side text sits a little lower; text and white fade fade out together, opacity only (nothing shrinks or slides in).
 - No click sounds on any text. Whooshes on cards, the cash sounds and the phone ding stay.
 - No captions while he screen-shares.
