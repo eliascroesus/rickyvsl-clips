@@ -359,7 +359,11 @@ def main():
     dec = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", f"{start:.4f}", "-i", base_path, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
                            stdout=subprocess.PIPE)
     enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-                            "-r", str(FPS), "-i", "-", "-vf", f"setpts=PTS+{start:.4f}/TB,ass={ass_path},setpts=PTS-STARTPTS,format=yuv420p", "-c:v", "libx264",
+                            "-r", str(FPS), "-i", "-", "-vf", f"setpts=PTS+{start:.4f}/TB,ass={ass_path},setpts=PTS-STARTPTS,"
+                            "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p", "-c:v", "libx264",
+                            # HD colour (BT.709), converted and tagged, so players show the colours as drawn (an untagged
+                            # BT.601 encode turns red orange in browsers)
+                            "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv",
                             "-preset", "medium", "-crf", "18", "-movflags", "+faststart", out_path], stdin=subprocess.PIPE)
     fsz = W * H * 3
     last = None

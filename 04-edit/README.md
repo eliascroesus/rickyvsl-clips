@@ -175,3 +175,12 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
   photos and clips, whooshes on everything that comes in. Money said aloud with no picture keeps its cash sound.
 - No sound on captions except highlights: a soft whoosh on each blue highlight line, and the money-lost highlights
   ($87, $0, $457, $1,500) in red, landing with a thud.
+
+## Variant B5 (after review of B4, `scripts/plan_ab5.py`)
+
+- The $0 / 18,000,000 / $87 cards in Iman Gadzhi's title-card style: the dark brand plate, big Unbounded numbers
+  revealed letter by letter, a spaced sub line and the YTD mark. Money lost in true red, the views in brand purple.
+- All the money-lost numbers ($87 in the opening, $0, $457, $1,500, $87) in true red (#FF2222).
+- **Colour fix (all renders from now on):** the compositor now converts to and tags HD colour (BT.709). Before, it
+  wrote BT.601 without a tag, so browsers showed reds as orange (and every colour slightly off).
+- His diner clip (`02-results-and-b-roll/diner.mp4`, 2.2 s) pops up beside him on "dining server" with a soft thud.
