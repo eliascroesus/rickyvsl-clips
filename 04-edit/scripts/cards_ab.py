@@ -90,6 +90,12 @@ def gradient(kind):
         r = np.clip(1 - (1 - x) / 0.6, 0, 1)
         a[:] = (r * r * (3 - 2 * r)) * 0.9
         rgb = (14, 14, 18)
+    elif kind in ("left_soft", "right_soft"):     # softer and narrower: strong only behind the text
+        x = np.arange(W) / W
+        d = x if kind == "left_soft" else 1 - x
+        r = np.clip((0.42 - d) / 0.22, 0, 1)
+        a[:] = (r * r * (3 - 2 * r)) * 0.8
+        rgb = (255, 255, 255)
     elif kind in ("left", "right"):
         x = np.arange(W) / W
         d = x if kind == "left" else 1 - x

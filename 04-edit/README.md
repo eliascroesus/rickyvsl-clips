@@ -164,3 +164,14 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
   "not what made me that money") and a steady tighter frame in the split screen.
 - Fellix: picked up automatically once its font files are installed (it's a paid font, so the files aren't in this
   public repo); until then Inter Display.
+
+## Variant B4 (after review of B3, `scripts/plan_ab4.py`)
+
+- The white side fade only 7 times, softer and narrower (strong only right behind the text), so it breaks the video
+  up without taking the focus; the other moments are blue highlight lines at the bottom.
+- Full-screen pictures in Iman Gadzhi's premium style instead of white: the dark brand plate, glowing tilted cards with
+  the key number outlined, his phone clips in glowing frames.
+- More sound on images: a cash register when a money screenshot lands (full screen or beside him), a soft thud on other
+  photos and clips, whooshes on everything that comes in. Money said aloud with no picture keeps its cash sound.
+- No sound on captions except highlights: a soft whoosh on each blue highlight line, and the money-lost highlights
+  ($87, $0, $457, $1,500) in red, landing with a thud.
