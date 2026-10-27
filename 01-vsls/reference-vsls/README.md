@@ -1,6 +1,6 @@
 # Reference VSLs
 
-The breakdown of the uploaded ones (Iman Gadzhi and AB Trades) is in [BREAKDOWN.md](BREAKDOWN.md), with example stills in [`frames/`](frames/).
+The breakdown of the uploaded ones (Iman Gadzhi and AB Trades) is in [BREAKDOWN.md](BREAKDOWN.md), with example stills in [`frames/`](frames/). How Iman's music builds tension is in [IMAN-AUDIO.md](IMAN-AUDIO.md).
 
 Upload example VSLs here, one file per VSL. A line in `notes.md` on why each one is a good example helps.
 

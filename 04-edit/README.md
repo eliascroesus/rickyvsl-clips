@@ -31,3 +31,11 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
 - `scripts/compositor.py`: draws the animated graphics frame by frame over the cut footage and burns in the text.
 - `scripts/music2.py` + `scripts/music_cues2.py`: the cinematic fallback score (string-style pads, sub swells, low
   pulse) and where each part plays. Swap in licensed tracks when available.
+
+## Version 3
+
+- `scripts/plan3.py`: plain static subtitles (no animation or colour), no animated headlines, screen shares left
+  exactly as recorded, results and photos popping up beside Ricky with a thud, title cards kept.
+- `scripts/music3.py` + `scripts/music_cues3.py`: the tension score modelled on Iman Gadzhi's bed (breakdown in
+  `01-vsls/reference-vsls/IMAN-AUDIO.md`): starts on frame 1, hit after the hook, 115 BPM bass pulse, never silent.
+- `scripts/separate.py`, `voice_comb.py`, `gap_music.py`, `analyze_bed.py`: the tools used to study Iman's audio.
