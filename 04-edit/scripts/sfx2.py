@@ -73,6 +73,20 @@ def ding():
     return (out / np.abs(out).max() * 0.9).astype(np.float32)
 
 
+def click(seed):
+    """A subtle mouse click: a crisp tick (band-limited noise, ~3 ms) on a tiny plastic body (~3.3 kHz, ~6 ms)."""
+    r = np.random.default_rng(seed)
+    n = int(0.05 * SR)
+    t = np.arange(n) / SR
+    tick = bp(r.standard_normal(n), 3500, 11000) * np.exp(-t / 0.0025)
+    f = 3300 * (1 + 0.05 * (seed - 1.5))
+    body = np.sin(2 * np.pi * f * t) * np.exp(-t / 0.006) * 0.3
+    x = tick / (np.abs(tick).max() + 1e-9) + body
+    x[: int(0.0004 * SR)] *= np.linspace(0, 1, int(0.0004 * SR))
+    x = np.stack([x, x], 1)
+    return (x / np.abs(x).max() * 0.9).astype(np.float32)
+
+
 if __name__ == "__main__":
     o = sys.argv[1]
     os.makedirs(o, exist_ok=True)
@@ -80,4 +94,6 @@ if __name__ == "__main__":
     for i, s in enumerate((0, 1, 2)):
         sf.write(f"{o}/cash_light{i + 1}.wav", cash(s, light=True), SR, subtype="FLOAT")
     sf.write(f"{o}/ding.wav", ding(), SR, subtype="FLOAT")
+    for i in range(4):
+        sf.write(f"{o}/click{i + 1}.wav", click(i), SR, subtype="FLOAT")
     print("ok")

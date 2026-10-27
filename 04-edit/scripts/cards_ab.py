@@ -74,3 +74,46 @@ def behind_text(text, size=172, cy=205, font="/usr/share/fonts/opentype/inter/In
     out.alpha_composite(layer)
     out.save(p)
     return p
+
+
+def gradient(kind):
+    """Full-frame overlays: AB's white fade on the side where side text sits, and the dark fade along the bottom
+    that his word captions sit on."""
+    import numpy as np
+    p = f"{OUT}/grad_{kind}.png"
+    if os.path.exists(p):
+        return p
+    W, H = 1920, 1080
+    a = np.zeros((H, W), np.float32)
+    if kind == "right_dark":                      # AB's list side: a dark grey fade from the right edge, white text
+        x = np.arange(W) / W
+        r = np.clip(1 - (1 - x) / 0.6, 0, 1)
+        a[:] = (r * r * (3 - 2 * r)) * 0.9
+        rgb = (14, 14, 18)
+    elif kind in ("left", "right"):
+        x = np.arange(W) / W
+        d = x if kind == "left" else 1 - x
+        r = np.clip(1 - d / 0.50, 0, 1)
+        a[:] = (r * r * (3 - 2 * r)) * 0.93
+        rgb = (255, 255, 255)
+    else:                                         # bottom
+        y = np.arange(H) / H
+        r = np.clip((y - 0.60) / 0.40, 0, 1)
+        a[:] = ((r * r * (3 - 2 * r)) * 0.55)[:, None]
+        rgb = (0, 0, 0)
+    im = Image.new("RGBA", (W, H), rgb + (0,))
+    im.putalpha(Image.fromarray((a * 255).astype("uint8")))
+    im.save(p)
+    return p
+
+
+def photo_file(path, max_w=560, max_h=600):
+    """Like photo(), for any image file (e.g. an uploaded diner photo)."""
+    from PIL import ImageOps
+    import pillow_heif
+    pillow_heif.register_heif_opener()
+    p = f"{OUT}/photo_{os.path.basename(path)}_{max_w}x{max_h}.png"
+    if not os.path.exists(p):
+        im = ImageOps.exif_transpose(Image.open(path)).convert("RGB")
+        shadowed(fit(im, max_w - 16, max_h - 16), 14, frame=8, alpha=120, blur=22).save(p)
+    return p

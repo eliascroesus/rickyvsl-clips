@@ -137,3 +137,16 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
 - The offer as a split screen ("WHAT'S INCLUDED INSIDE YTD") building line by line.
 - A whoosh or pop on every graphic, cash-register sounds on the money moments, the boom-free song bed softer
   underneath (17 dB under the voice, like AB's quieter bed).
+
+## Variant B2: AB Nasdaq 1:1 (`scripts/plan_ab2.py`, breakdown in `01-vsls/reference-vsls/AB-BREAKDOWN.md`)
+
+- Word captions exactly like AB's: lowercase, no punctuation, his size and tight spacing, hard switches, now 1-2
+  words at a time, over AB's dark fade along the bottom of the frame.
+- AB's side text used for ~30 key lines through the whole video: a regular line, then heavy caps with the key word in
+  blue, built as Ricky says it (letter-by-letter blur-in) on a white fade from that edge; the bottom captions step
+  aside while it's up. The "three things" list sits on AB's dark grey fade instead.
+- A subtle mouse click on every caption and every piece of text (no more pops), whooshes on cards, the cash sounds.
+- "YOUTUBE SHORTS" now sits fully visible at the top (in front of him, nothing cut off).
+- The zoom never moves faster than 5% per second and only drifts while side text needs the room.
+- A slot for his diner photo or 2-second clip on "dining server" (both times): upload it to
+  `02-results-and-b-roll/` named `diner.jpg` / `diner.mov` (or `.heic`, `.png`, `.mp4`) and it drops in beside him.
