@@ -85,3 +85,19 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
 - `scripts/level_score.py` now keeps the true section levels (it used to renormalise to the loudest peak, which
   only worked while the booms were the peaks).
 - **No zoom on the opening**; the first zoom is "I was this close". The other zooms are unchanged.
+
+## Version 8
+
+- **Music back to v6's violins** (`scripts/strings_score5.py`): v7's alternating broken-chord "tick-tock" violins
+  are gone; the strings are exactly v6's, without the booms, playing at v6's level. The light tambourine tick from v6
+  sits 2-3 dB quieter.
+- **Subtle sound effects** (`scripts/sfx2.py`, built from real CC0 recordings: tambourine, sleigh bells,
+  glockenspiel, triangle; cues in `v8/edl8.json`):
+  - a cash-register "cha-ching" on the money moments ("$10,000 in just three days" twice, "$300,000",
+    "my first $10,000 month", the payout card)
+  - three quick, rising lighter ones on "sale after sale after sale"
+  - a soft whoosh under the five quicker zooms
+  - a soft pop as each number lands on the 01 / 02 / 03 cards and the recap
+  - a phone "ding" on "my personal phone number"
+  All sit a few dB under Ricky's voice.
+- Picture is the same as v7.
