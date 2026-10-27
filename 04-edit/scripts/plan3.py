@@ -36,7 +36,6 @@ CLIPS = [  # file, t0, t1, in, mode, clip audio dB
 
 ZOOMS = [  # smooth zooms on Ricky at the tense lines: keyframes (raw time, zoom), eased in and out, no jumps.
     # A move that ends on a title card holds its zoom until the card fully covers the frame.
-    [(0.00, 1.0), (5.70, 1.10), (8.10, 1.12), (8.95, 1.0)],                    # hook into "$87", held under the $87
     [(11.80, 1.0), (12.62, 1.16), (13.95, 1.19), (14.80, 1.0)],                # "I was this close to believing them"
     [(74.40, 1.0), (75.15, 1.13), (75.95, 1.15), (76.85, 1.0)],                # "The truth is, you don't."
     [(92.00, 1.0), (95.30, 1.10), (95.55, 1.10)],                              # "...is the one place" into the card

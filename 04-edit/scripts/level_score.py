@@ -33,13 +33,17 @@ def main():
     for a, b, tgt in SECS:
         s, t = int(m(a) * SR), int(m(b) * SR)
         L = meter.integrated_loudness(x[s:t])
-        gain = 10 ** (np.clip(tgt - L, -6, 8) / 20)
+        gain = 10 ** (np.clip(tgt - L, -15, 10) / 20)
         print(f"{m(a):6.1f}-{m(b):6.1f}s  {L:6.1f} -> {tgt} LUFS  ({20 * np.log10(gain):+.1f} dB)")
         g[s:t] = gain
     k = int(0.6 * SR)                       # glide between sections over 0.6 s
     g = np.convolve(np.pad(g, (k, k), mode="edge"), np.ones(k) / k, "same")[k:-k]
     lv = (x * g[:, None]).astype(np.float32)
-    sf.write(sys.argv[3], lv / np.abs(lv).max() * 0.9, SR, subtype="FLOAT")
+    pk = np.abs(lv).max()
+    if pk > 0.95:                           # keep the real section levels; only pull down if it would clip
+        lv = lv / pk * 0.95
+        print(f"pulled down {20 * np.log10(pk / 0.95):.1f} dB to avoid clipping")
+    sf.write(sys.argv[3], lv, SR, subtype="FLOAT")
 
 
 if __name__ == "__main__":

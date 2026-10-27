@@ -75,3 +75,13 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
   instant punch-ins or snap-backs; where a move starts or ends wide it crossfades with the footage.
 - **The opening "$87" is a red number on top of Ricky** (top-left, with "IN SALES." under it) instead of its own black
   page, so you see him lift his phone with the real stats at the same time (`OVERLAY_TITLES` in `scripts/plan3.py`).
+
+## Version 7
+
+- **No booms**: the music has no drums, timpani rolls or sub hits any more (`scripts/strings_score4.py`).
+- **More movement in the strings for retention**, after comparing with AB Nasdaq as well as Iman
+  (`scripts/music_events.py`): violins alternate every 4 bars between re-bowed pairs (Iman) and broken chords (AB),
+  4-bar swells, and a melody that walks into each chord. Sound and level are the same as v6.
+- `scripts/level_score.py` now keeps the true section levels (it used to renormalise to the loudest peak, which
+  only worked while the booms were the peaks).
+- **No zoom on the opening**; the first zoom is "I was this close". The other zooms are unchanged.

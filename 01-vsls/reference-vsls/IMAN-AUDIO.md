@@ -84,5 +84,29 @@ The tick is the part you "hear" as tension without noticing it: a clock running 
 tempo and the crisp, focused strings are the difference between "violins playing" and his "something is about to
 happen" feel.
 
+## AB Nasdaq's bed, for comparison (v7)
+
+Same method on `abnasdaqvsl.mp4`: its side signal is music only too (it doesn't follow his voice at all, correlation
+−0.02).
+
+- **Held chords underneath, broken chords on top.** A sustained two-note chord in the middle (e.g. C4 + G4) that
+  changes every ~2 s. Above it, chords in the 5th octave played as broken, freer rhythms, about 3 attacks a
+  second and never on a strict grid (`frames/ab_strings_1-5s.jpg`). It feels played, not programmed.
+- **Never stops, and changes texture about as often as Iman's**: a texture change every 9.8 s (median 6 s)
+  against Iman's 9.4 s (median 6 s). Neither drops the music out mid-video.
+- **No regular pump.** Neither bed has a steady level "pump" (that measured 0.255 s pulse turned out to be my method;
+  plain noise gives the same answer).
+
+What both share, and what Ricky's score keeps: something moves at three speeds at once. Fast: Iman's ticks and
+re-bowed notes, AB's broken chords. Medium: the chord changes every 1-2 s. Slow: the texture shifts every 6-10 s.
+
+**v7 (`04-edit/scripts/strings_score4.py`):**
+
+- No booms: no drums, timpani, rolls or sub hits.
+- The violins switch every 4 bars between Iman-style re-bowed pairs and AB-style broken chords.
+- Each 4-bar phrase swells a little and resets.
+- The melody walks into the next chord through passing notes.
+- The music is never off for more than half a second.
+
 A cleaner breakdown (his music fully separated from his voice) needs the Demucs separation model, whose download
 host (`dl.fbaipublicfiles.com`) is blocked in this environment.
