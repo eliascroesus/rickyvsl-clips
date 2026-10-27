@@ -288,7 +288,7 @@ def main():
             x, an = (110, 4) if side == "L" else (1810, 6)
             size = fit(text, kind)
             body = B.ass_reveal(text, 0, 16, 220, 10, col)
-            fade = "\\fad(0,330)" if abs(t1 - span_end) < 0.01 else ""     # fade out with the white fade
+            fade = "\\fad(0,330)" if abs(t1 - span_end) < 0.01 else "\\fad(0,140)"   # with the white fade / quick swap
             events.append(ev(4, m(ts), t1, style, f"{{\\an{an}\\pos({x},{y:.0f})\\fs{size}{fade}}}" + body))
             y += hgt
 
