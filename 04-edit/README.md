@@ -150,3 +150,16 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
 - The zoom never moves faster than 5% per second and only drifts while side text needs the room.
 - A slot for his diner photo or 2-second clip on "dining server" (both times): upload it to
   `02-results-and-b-roll/` named `diner.jpg` / `diner.mov` (or `.heic`, `.png`, `.mp4`) and it drops in beside him.
+
+## Variant B3 (after review of B2, `scripts/plan_ab3.py`)
+
+- Side text with the white fade only on 13 key moments (it was ~30); the rest are word captions again, plus blue
+  emphasis lines ("YOU DON'T", "NOT YOUR FAULT", "THE TIKTOK SCAMS", "RIGHT ABOUT ME", "THAT MONEY"...).
+- Side text sits a little lower; text and white fade fade out together, opacity only (nothing shrinks or slides in).
+- No click sounds on any text. Whooshes on cards, the cash sounds and the phone ding stay.
+- No captions while he screen-shares.
+- Zooms with intent instead of a constant push/pull: an eased push on the lines that carry weight ("this close",
+  "the truth is, you don't", "I can't do this anymore", "the TikTok scams", his mom's line, "don't click off",
+  "not what made me that money") and a steady tighter frame in the split screen.
+- Fellix: picked up automatically once its font files are installed (it's a paid font, so the files aren't in this
+  public repo); until then Inter Display.

@@ -55,6 +55,9 @@ class Anim:
         self.t0, self.t1, self.kind, self.tin, self.tout = t0, t1, kind, tin, tout
 
     def at(self, t):
+        if self.kind == "overlay":                      # full-frame fades: opacity only, nothing moves or shrinks
+            x, y = clamp((t - self.t0) / 0.3), clamp((self.t1 - t) / 0.33)
+            return min(x * x * (3 - 2 * x), y * y * (3 - 2 * y)), 1.0, 0
         a = (t - self.t0) / self.tin
         b = (self.t1 - t) / self.tout
         op = min(clamp(a * 2.2), clamp(b))
