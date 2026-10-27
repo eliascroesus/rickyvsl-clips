@@ -154,6 +154,69 @@ def ease_in_out(x):
     return 0.5 - 0.5 * np.cos(np.pi * x)
 
 
+class Split:
+    """AB-style split screen: Ricky in a tall panel on the left (cropped around his face), a solid panel on the right
+    for a list that the text layer builds line by line. The right panel slides in."""
+
+    def __init__(self, e):
+        self.e = e
+        self.pw = e.get("panel_w", 840)
+        self.cx = e.get("cx", 930)
+        self.bg = np.array(e.get("rgb", [8, 8, 10]), np.float32)
+
+    def draw(self, frame, base, t):
+        k = min(ease_out_cubic((t - self.e["t0"]) / 0.35), ease_out_cubic((self.e["t1"] - t) / 0.35))
+        x0 = int(min(max(self.cx - self.pw / 2, 0), W - self.pw))
+        left = int(round(W - (W - self.pw) * k))             # the right panel slides in from the right edge ...
+        shift = int(round(x0 * k))                           # ... while the shot slides left into its panel
+        frame[:, :left] = base[:, shift:shift + left]
+        frame[:, left:] = self.bg
+
+
+class Behind:
+    """AB-style giant text behind Ricky: the text layer is drawn only where he isn't. His outline comes from GrabCut
+    on a small copy of each frame, seeded from the previous frame's outline so it stays steady."""
+
+    def __init__(self, e):
+        self.e = e
+        self.img = np.asarray(Image.open(e["img"]).convert("RGBA"), np.float32)
+        self.prev = None
+
+    def person(self, base):
+        import cv2
+        sw, sh = 480, 270
+        bgr = np.ascontiguousarray(cv2.resize(base, (sw, sh), interpolation=cv2.INTER_AREA)[..., ::-1])
+        m = np.zeros((sh, sw), np.uint8)
+        bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+        if self.prev is None:
+            cv2.grabCut(bgr, m, (100, 25, 285, sh - 26), bgd, fgd, 6, cv2.GC_INIT_WITH_RECT)
+        else:
+            m[:] = cv2.GC_PR_BGD
+            m[self.prev > 0] = cv2.GC_PR_FGD
+            m[cv2.erode(self.prev, np.ones((9, 9), np.uint8)) > 0] = cv2.GC_FGD
+            m[cv2.dilate(self.prev, np.ones((21, 21), np.uint8)) == 0] = cv2.GC_BGD
+            cv2.grabCut(bgr, m, None, bgd, fgd, 3, cv2.GC_INIT_WITH_MASK)
+        fg = (((m == 1) | (m == 3)) * 255).astype(np.uint8)
+        n, lab, st, _ = cv2.connectedComponentsWithStats(fg)
+        if n > 1:
+            fg = ((lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))) * 255).astype(np.uint8)
+        fg = cv2.morphologyEx(fg, cv2.MORPH_CLOSE, np.ones((11, 11), np.uint8))
+        holes = fg.copy()
+        cv2.floodFill(holes, None, (0, 0), 255)
+        fg = fg | cv2.bitwise_not(holes)                  # fill holes inside him (eyes, collar)
+        self.prev = fg
+        full = cv2.GaussianBlur(cv2.resize(fg, (W, H), interpolation=cv2.INTER_LINEAR), (0, 0), 1.6)
+        return (full.astype(np.float32) / 255.0)[..., None]
+
+    def draw(self, frame, base, t):
+        op = min(clamp((t - self.e["t0"]) / 0.12), clamp((self.e["t1"] - t) / 0.2))
+        if op <= 0:
+            return
+        a = self.img[..., 3:4] / 255.0 * op * (1 - self.person(base))
+        frame *= 1 - a
+        frame += self.img[..., :3] * a
+
+
 class Zoom:
     """Smooth zooms on Ricky, cropped from the 4K original so the close-up stays sharp.
 
@@ -232,7 +295,11 @@ class Clip:
         self.w = round(self.h * 9 / 16) // 2 * 2
         self.anim = Anim(e["t0"], e["t1"], e.get("anim", "pop"))
         fr = Image.new("RGB", (self.w, self.h), (0, 0, 0))
-        self.tmpl = B.framed(fr, self.w, self.h, radius=28)   # glow + border + shadow template
+        if e.get("style") == "ab":                            # AB Nasdaq look: clean rounded clip, soft shadow
+            import cards_ab
+            self.tmpl = cards_ab.shadowed(fr, 28, alpha=90)
+        else:
+            self.tmpl = B.framed(fr, self.w, self.h, radius=28)   # glow + border + shadow template
         m = Image.new("L", (self.w, self.h), 0)
         ImageDraw.Draw(m).rounded_rectangle((0, 0, self.w - 1, self.h - 1), 28, fill=255)
         self.mask = m
@@ -276,9 +343,13 @@ def main():
     end = float(sys.argv[7]) if len(sys.argv) > 7 else total
     plate = np.asarray(B.plate(), np.float32)
     plates = els.get("plates", [])
+    solid = {}
+    for p in plates:
+        if "rgb" in p and tuple(p["rgb"]) not in solid:
+            solid[tuple(p["rgb"])] = np.full((H, W, 3), p["rgb"], np.float32)
     objs = []
     for e in els.get("elements", []):
-        cls = {"card": Card, "frame": FrameBase, "clip": Clip}[e["type"]]
+        cls = {"card": Card, "frame": FrameBase, "clip": Clip, "split": Split, "behind": Behind}[e["type"]]
         objs.append((e["t0"], e["t1"], cls(e)))
     zooms = [Zoom(z, els["keep"], els["zoom_src"]) for z in els.get("zooms", [])]
     n0, n = int(round(start * FPS)), int(round(end * FPS))
@@ -306,19 +377,26 @@ def main():
             elif t >= z.z["t1"]:
                 z.close()
         active = [o for t0, t1, o in objs if t0 <= t < t1]
-        pa = 0.0
+        pa, pimg = 0.0, plate
         for p in plates:
             if p["t0"] <= t < p["t1"]:
-                pa = max(pa, min(clamp((t - p["t0"]) / max(p.get("fade_in", 0.14), 1e-3)), clamp((p["t1"] - t) / max(p.get("fade_out", 0.14), 1e-3))))
+                a = min(clamp((t - p["t0"]) / max(p.get("fade_in", 0.14), 1e-3)), clamp((p["t1"] - t) / max(p.get("fade_out", 0.14), 1e-3)))
+                if a > pa:
+                    pa, pimg = a, solid.get(tuple(p["rgb"]), plate) if "rgb" in p else plate
         if not active and pa <= 0:
             enc.stdin.write(raw)
             continue
         base = np.frombuffer(raw, np.uint8).reshape(H, W, 3)
         frame = base.astype(np.float32)
-        if pa > 0:
-            frame = frame * (1 - pa) + plate * pa
         for o in active:
-            if isinstance(o, FrameBase):
+            if isinstance(o, Split):
+                o.draw(frame, base, t)
+        if pa > 0:
+            frame = frame * (1 - pa) + pimg * pa
+        for o in active:
+            if isinstance(o, Split):
+                continue
+            if isinstance(o, (FrameBase, Behind)):
                 o.draw(frame, base, t)
             else:
                 o.draw(frame, t)

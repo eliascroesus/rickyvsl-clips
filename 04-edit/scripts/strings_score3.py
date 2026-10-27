@@ -13,7 +13,7 @@ What changed after measuring his music against ours (music-only side channel and
 Composition (progressions, sections, cues) is the same as v2: chords every 2 beats over the falling A-G-F-E bass in
 the tense parts, every bar in the calm ones, a melody moving with each chord, a rising staircase into the reveal.
 
-    python strings_score3.py edl3.json out.wav
+    python strings_score3.py edl3.json out.wav [--no-sub]
 """
 import glob, json, sys
 import numpy as np
@@ -230,6 +230,7 @@ def sub_boom():
 
 
 _h = [0]
+SUB_DROP = "--no-sub" not in sys.argv     # the long sub "drop" under each hit (v6 had it; v9 removes it)
 
 
 def hit(lg, sub, t, big=1.0):
@@ -238,7 +239,8 @@ def hit(lg, sub, t, big=1.0):
     S0.perc(lg.x, BDRUM[_h[0] % 3 if big >= 1 else 2], t, gain=2.6 * big)
     long(lg, "cb_sus", 33, t, 1.6, vel=0.95, release=1.2, gain=1.3 * big, attack=0.005)
     long(lg, "vc_sus", 45, t, 1.6, vel=0.95, release=1.2, gain=1.0 * big, attack=0.005)
-    place(sub, sub_boom(), t, 0.45 * big)
+    if SUB_DROP:
+        place(sub, sub_boom(), t, 0.45 * big)
 
 
 def roll(lg, t_end, length=3.0, gain=1.6):

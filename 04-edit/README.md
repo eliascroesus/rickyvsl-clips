@@ -101,3 +101,39 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
   - a phone "ding" on "my personal phone number"
   All sit a few dB under Ricky's voice.
 - Picture is the same as v7.
+
+## Version 9
+
+- **v6's music exactly**, the version that was liked, with only the long sub "drop" boom under each hit removed
+  (`scripts/strings_score3.py --no-sub`). The timpani hits and rolls that build the tension stay. Iman's bed has the
+  same shape: short low hits on key phrases about every 15 s and constant string motion, no long crescendos.
+  v7/v8 had removed every hit and roll, which flattened the tension.
+- Sound effects as in v8 (cash register, pops, whooshes, ding). Picture as in v7.
+
+## Variant A: "Me And The Devil" (instrumental)
+
+- `scripts/song_bed.py` turns the uploaded track into a bed: keeps only its tonal part (harmonic/percussive
+  separation drops every kick, 808 hit and snare), cuts everything under 160 Hz so no boom is left (the sub band
+  falls from −8 dB to −48 dB relative to the rest), loops it on its own 2-beat grid at the points where the music
+  matches best (`variant-a-song/loop_plan.json`), and evens the level so the tension holds the whole 6:19.
+- Same picture and sound effects as v9; the music sits about 15 dB under Ricky's voice.
+- The song file isn't in this repo (it's copyrighted and this repo is public). Using it in a paid ad needs a licence.
+
+## Variant B: AB Nasdaq style (`scripts/plan_ab.py`, `scripts/cards_ab.py`)
+
+Measured on AB's video first (`scripts/ab_zoom_analysis.py`): a cut every ~4 s between his face, graphics and
+proof, and on his face the shot is never still: about 80% of face shots slowly push in or pull out by 15-25% over
+5-15 s.
+
+- Word-group captions (2-4 words, one line, white, tight Apple-style sans with a soft shadow, no punctuation).
+- Key phrases drop to their own line in heavy electric-blue caps with a glow ("THIS CLOSE", "$10,000 IN 3 DAYS",
+  "DO NOT CLICK OFF", "COMPLETELY FREE", "DOWN BELOW"...).
+- The always-moving zoom on Ricky, cropped from the 4K original, held wide wherever text needs the empty side.
+- The hook as stacked regular + heavy-caps text in the empty left side, then a big blue "$87".
+- White keynote cards with black words appearing as he says them; big blue numbers on white ($0, 18,000,000, $87).
+- Proof as clean cards on a light-grey keynote plate; photos beside him in thin white frames; clips framed on white.
+- "YOUTUBE SHORTS" in giant letters behind his head (his outline cut out per frame with OpenCV GrabCut).
+- "The three things" as a list in the empty side of the frame with an arrow on the one he's on.
+- The offer as a split screen ("WHAT'S INCLUDED INSIDE YTD") building line by line.
+- A whoosh or pop on every graphic, cash-register sounds on the money moments, the boom-free song bed softer
+  underneath (17 dB under the voice, like AB's quieter bed).
