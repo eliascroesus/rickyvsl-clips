@@ -48,3 +48,18 @@ Edit the cue sheet at the top of `scripts/plan.py` (times are in the raw video, 
   violin tremolo for the hook, timpani rolls into timpani + bass drum + low-string hits.
 - `scripts/vsco_index.py`: indexes the samples and checks each one's real pitch.
 - Video is the same as version 3; only the music and hits changed (`v3/edl4.json`).
+
+## Version 5 (zooms + strings rewritten after Iman's violins)
+
+- **Zooms on Ricky** (`ZOOMS` in `scripts/plan3.py`, drawn by the `Zoom` class in `scripts/compositor.py`): 13
+  moves at the tense lines. Slow push-ins (e.g. the hook into "$87", the mom quote, "everybody was right about me",
+  the build into "YouTube Shorts", the guarantee into "60 DAYS") and snap punch-ins ("I was *this close*", "the truth
+  is, you don't", "I can't do this anymore", "you're falling for the TikTok scams", "please do not click off").
+  Each one cuts back to the wide shot at its end. They're cropped from the 4K original, so they stay sharp, and never
+  run during screen shares or title cards.
+- **Strings rewritten** (`scripts/strings_score2.py`) after measuring how the strings move in Iman's bed
+  (`01-vsls/reference-vsls/IMAN-AUDIO.md`, tool: `scripts/iman_violins.py`): chords every 2 beats over a falling
+  A-G-F-E bass, violins re-bowing on every 16th, an E pedal ticking in eighths, a melody that moves with each
+  chord, a rising staircase into the reveal and a slide down into "what most people don't understand".
+- `scripts/level_score.py`: levels the score per section; the music then sits 2 dB lower than in v4 (`v5/edl5.json`).
+- `scripts/render_chunks.sh`: renders the video in parallel chunks that can be resumed.

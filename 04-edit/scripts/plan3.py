@@ -34,6 +34,23 @@ CLIPS = [  # file, t0, t1, in, mode, clip audio dB
     ("IMG_8117.mov", 270.50, 277.00, 3.0, "plate", -16),
 ]
 
+ZOOMS = [  # push-ins / punch-ins on Ricky at the tense lines (raw time): kind, t0, t1, z0, z1
+    ("push", 0.00, 5.70, 1.00, 1.10),      # hook, pushing into "$87"
+    ("punch", 12.30, 14.20, 1.18, 1.22),   # "I was this close to believing them"
+    ("punch", 74.60, 76.32, 1.14, 1.16),   # "The truth is, you don't."
+    ("push", 92.00, 95.30, 1.00, 1.10),    # "...is the one place" into the title card
+    ("push", 114.55, 120.20, 1.00, 1.10),  # "a grown man threatened me at work..."
+    ("punch", 120.20, 121.32, 1.18, 1.20), # "I can't do this anymore"
+    ("punch", 139.75, 142.60, 1.15, 1.18), # "bro, you're falling for the TikTok scams"
+    ("push", 170.90, 173.86, 1.00, 1.12),  # mom: "I don't think you should be doing this anymore"
+    ("push", 183.24, 186.60, 1.00, 1.12),  # "everybody was right about me"
+    ("punch", 188.66, 190.66, 1.17, 1.19), # "please do not click off of this video"
+    ("push", 194.70, 201.70, 1.00, 1.14),  # the one place nobody tried, into "YouTube Shorts"
+    ("push", 279.66, 283.80, 1.00, 1.12),  # "Posting on YouTube Shorts is not what made me that money"
+    ("push", 355.95, 360.30, 1.00, 1.12),  # the guarantee, into "60 DAYS"
+]
+ZOOM_SRC = "/home/user/work/src/rickyvslraw.mp4"
+
 SUBS = P2.STYLES.replace(
     "Style: Cap,Inter Display,60,&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,-1,0,0,0,100,100,-0.5,0,1,0,3,2,140,140,70,1",
     "Style: Cap,Inter Display SemiBold,50,&H00FFFFFF,&H00FFFFFF,&H00000000,&H8C000000,0,0,0,0,100,100,0,0,1,0,2,2,160,160,64,1\n"
@@ -216,7 +233,11 @@ def main():
 
     os.makedirs(outdir, exist_ok=True)
     open(f"{outdir}/text.ass", "w").write(SUBS + "\n".join(events) + "\n")
-    json.dump({"plates": plates, "elements": elements}, open(f"{outdir}/elements.json", "w"), indent=1)
+    zooms = [{"kind": k, "t0": m(a), "t1": m(b), "z0": z0, "z1": z1} for k, a, b, z0, z1 in ZOOMS]
+    for z in zooms:
+        assert not any(z["t0"] < m(b) and m(a) < z["t1"] for a, b in SCREEN), z
+    json.dump({"plates": plates, "elements": elements, "zooms": zooms, "keep": keep, "zoom_src": ZOOM_SRC},
+              open(f"{outdir}/elements.json", "w"), indent=1)
     edl = {"items": [{"kind": "aroll", "in": a, "out": b} for a, b in keep], "sfx": sfx, "inserts": audio_inserts,
            "music": [], "duck_db": 4, "total": total, "keep": keep}
     json.dump(edl, open(f"{outdir}/edl3.json", "w"), indent=1)

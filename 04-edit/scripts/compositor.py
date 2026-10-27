@@ -149,6 +149,70 @@ class FrameBase:
                 blend(frame, im, x + int(bx * sc), y + int(by * sc), op)
 
 
+def ease_in_out(x):
+    x = clamp(x)
+    return 0.5 - 0.5 * np.cos(np.pi * x)
+
+
+class Zoom:
+    """Push-ins and punch-ins on Ricky, cropped from the 4K original so the close-up stays sharp.
+
+    Each move is {t0, t1, z0, z1, kind}: "push" eases from z0 to z1 over the whole move, "punch" jumps to z0 and creeps
+    to z1. Both cut straight back to the wide shot at t1, which reads as a camera cut. The source is decoded per A-roll
+    piece at 1.2x output size (2304x1296), so no zoom up to 1.2 ever upscales.
+    """
+
+    S = 1.2
+
+    def __init__(self, z, keep, src):
+        self.z, self.src = z, src
+        self.cx, self.cy = z.get("cx", 930), z.get("cy", 590)
+        self.pieces, f = [], 0                      # (first output frame, n frames, raw start) per A-roll piece
+        i0, i1 = round(z["t0"] * FPS), round(z["t1"] * FPS)
+        for a, b in keep:
+            n = round((b - a) * FPS)
+            lo, hi = max(i0, f), min(i1, f + n)
+            if lo < hi:
+                self.pieces.append((lo, hi - lo, a + (lo - f) / FPS))
+            f += n
+        self.proc, self.cur = None, -1
+        self.sw, self.sh = round(W * self.S), round(H * self.S)
+
+    def level(self, t):
+        z = self.z
+        x = (t - z["t0"]) / max(z["t1"] - z["t0"], 1e-3)
+        if z.get("kind") == "punch":
+            return z["z0"] + (z["z1"] - z["z0"]) * clamp(x)
+        return z["z0"] + (z["z1"] - z["z0"]) * ease_in_out(x)
+
+    def frame(self, i, t):
+        k = next((j for j, (f0, n, _) in enumerate(self.pieces) if f0 <= i < f0 + n), None)
+        if k is None:
+            return None
+        if k != self.cur:
+            self.close()
+            f0, n, ss = self.pieces[k]
+            self.proc = subprocess.Popen(
+                ["ffmpeg", "-v", "error", "-ss", f"{ss:.4f}", "-i", self.src, "-frames:v", str(n),
+                 "-vf", f"fps={FPS},scale={self.sw}:{self.sh}:flags=lanczos", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                stdout=subprocess.PIPE)
+            self.cur = k
+        raw = self.proc.stdout.read(self.sw * self.sh * 3)
+        if len(raw) < self.sw * self.sh * 3:
+            return None
+        img = Image.frombytes("RGB", (self.sw, self.sh), raw)
+        zl = self.level(t)
+        cw, ch = self.sw / zl, self.sh / zl
+        x0 = min(max(self.cx * self.S - cw / 2, 0), self.sw - cw)
+        y0 = min(max(self.cy * self.S - ch / 2, 0), self.sh - ch)
+        return img.resize((W, H), Image.LANCZOS, box=(x0, y0, x0 + cw, y0 + ch)).tobytes()
+
+    def close(self):
+        if self.proc:
+            self.proc.kill()
+            self.proc = None
+
+
 class Clip:
     """A phone clip in a rounded glowing frame (on the plate) or popping in beside Ricky."""
 
@@ -206,6 +270,7 @@ def main():
     for e in els.get("elements", []):
         cls = {"card": Card, "frame": FrameBase, "clip": Clip}[e["type"]]
         objs.append((e["t0"], e["t1"], cls(e)))
+    zooms = [Zoom(z, els["keep"], els["zoom_src"]) for z in els.get("zooms", [])]
     n0, n = int(round(start * FPS)), int(round(end * FPS))
     dec = subprocess.Popen(["ffmpeg", "-v", "error", "-ss", f"{start:.4f}", "-i", base_path, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
                            stdout=subprocess.PIPE)
@@ -220,6 +285,11 @@ def main():
         if len(raw) < fsz:
             raw = last
         last = raw
+        for z in zooms:
+            if z.z["t0"] <= t < z.z["t1"]:
+                raw = z.frame(i, t) or raw
+            elif t >= z.z["t1"]:
+                z.close()
         active = [o for t0, t1, o in objs if t0 <= t < t1]
         pa = 0.0
         for p in plates:
