@@ -239,3 +239,21 @@ Ricky's raw thank-you video (`thank-you-raw-footage` release), edited to the mea
   song's real outro (no loop joins), about 15 dB under his voice. The song isn't in this public repo (copyright), and
   using it in a paid ad needs a licence.
 - Captions, cuts and card timing as in v1.
+
+## FAQ videos (`scripts/faq_plan.py` + the thank-you v2 renderer)
+
+The four raw FAQ videos (`faq-raw-footage` release), edited exactly like thank-you v2 but without music:
+
+- AB's word captions;
+- Iman-style cards on the drifting brand plate;
+- glass icon tiles;
+- purple light sweeps;
+- only slow push-ins that hold until the next card;
+- cuts on true silence, voice only at −14 LUFS.
+
+| Video | Length | Cards |
+| --- | --- | --- |
+| How much time (`howmuchtime`) | 0:20 | "2 – 3 HOURS / A DAY. / STILL ABLE TO MAKE DROPSHIPPING WORK.", then "6 PRODUCTS / EVERY SINGLE MONTH." |
+| Is it saturated (`issaturated`) | 0:24 | red "HONESTLY DOESN'T WORK ANYMORE." with the falling line; TikTok / Instagram tiles over "INCREDIBLY DIFFICULT TO GET VIEWS AND SALES."; "STRICTLY ON YOUTUBE." |
+| Who you work with (`whoworkwith`) | 0:18 | "WITH ME PERSONALLY." with "NOT SOME OTHER ASSISTANT, / NOT SOME OTHER COACH." struck through in red; product / videos / store tiles over "SO YOU DON'T HAVE TO DO ANYTHING YOURSELF." |
+| What's inside (`Whatsinside`) | 1:28 | "7 DIFFERENT THINGS.", a numbered card for each of the seven as he names it (01–07), tiles for the coaching-call topics, and a recap of all seven at the end |

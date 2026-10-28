@@ -16,9 +16,9 @@ RAW_DUR = 152.81
 
 
 # ------------------------------------------------------------------ words
-def load_words():
+def load_words(path=f"{WORK}/thankyou/raw/transcript.json"):
     W = []
-    for s in json.load(open(f"{WORK}/thankyou/raw/transcript.json")):
+    for s in json.load(open(path)):
         for w in s["words"]:
             txt = w["w"].strip()
             if W and (txt.startswith("-") or txt == "%"):           # "one -on -one", "90 %" -> one word
@@ -34,8 +34,8 @@ def norm(t):
 
 
 # ------------------------------------------------------------------ cuts
-def plan_cuts(W):
-    y, sr = sf.read(f"{WORK}/edit/ty/voice_proc.wav")
+def plan_cuts(W, voice=f"{WORK}/edit/ty/voice_proc.wav", raw_dur=RAW_DUR):
+    y, sr = sf.read(voice)
     m = y.mean(1)
     hop = int(0.01 * sr)
     n = len(m) // hop
@@ -64,7 +64,7 @@ def plan_cuts(W):
     for c0, c1 in cuts:
         keep.append((t, c0))
         t = c1
-    keep.append((t, np.floor(RAW_DUR * FPS) / FPS))
+    keep.append((t, np.floor(raw_dur * FPS) / FPS))
     return keep
 
 

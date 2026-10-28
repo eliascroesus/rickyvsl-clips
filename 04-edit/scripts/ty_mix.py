@@ -12,10 +12,10 @@ SR = 48000
 
 def main():
     plan = json.load(open(sys.argv[1]))
-    bed, sr = sf.read(sys.argv[2], dtype="float64")
+    bed, sr = (np.zeros((1, 2)), SR) if sys.argv[2] == "none" else sf.read(sys.argv[2], dtype="float64")
     out = sys.argv[3]
     under = float(sys.argv[4]) if len(sys.argv) > 4 else 19.0
-    v, vsr = sf.read("/home/user/work/edit/ty/voice_proc.wav", dtype="float64")
+    v, vsr = sf.read(plan.get("voice", "/home/user/work/edit/ty/voice_proc.wav"), dtype="float64")
     assert vsr == SR and sr == SR
     n = int(round(plan["dur"] * SR))
     voice = np.zeros((n, 2))
@@ -33,9 +33,9 @@ def main():
     e = np.sqrt((voice[:k * hop].mean(1).reshape(k, hop) ** 2).mean(1))
     talk = e[e > np.percentile(e, 60) * 0.5]
     v_rms = np.sqrt((talk ** 2).mean())
-    pivot = int(plan["music"]["pivot"] * SR)
+    pivot = int(plan.get("music", {}).get("pivot", plan["dur"]) * SR)
     m_rms = np.sqrt((bed[:pivot] ** 2).mean())
-    g = v_rms / m_rms * 10 ** (-under / 20)
+    g = v_rms / m_rms * 10 ** (-under / 20) if m_rms > 0 else 0.0
     music = np.zeros((n, 2))
     m = min(n, len(bed))
     music[:m] = bed[:m] * g
@@ -49,7 +49,7 @@ def main():
                     f"loudnorm=I=-14:TP=-1.2:LRA=9:measured_I={st['input_i']}:measured_TP={st['input_tp']}:"
                     f"measured_LRA={st['input_lra']}:measured_thresh={st['input_thresh']}:offset={st['target_offset']}:linear=true",
                     "-ar", str(SR), "-c:a", "pcm_s24le", out], check=True)
-    print(f"voice cut into {len(plan['keep'])} pieces, music {under:.0f} dB under the voice (gain {20 * np.log10(g):.1f} dB)")
+    print(f"voice cut into {len(plan['keep'])} pieces, " + (f"music {under:.0f} dB under the voice" if g else "no music"))
 
 
 if __name__ == "__main__":

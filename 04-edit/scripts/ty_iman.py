@@ -130,10 +130,17 @@ def layout_rows(rows, cy, maxw=1640, gap=0.32):
             _, lw = letter_layout(text, r["style"], size)
         out.append([r, vis, text, size, lw])
         heights.append(size * (0.95 if r["style"] == "big" else 1.0))
-    total = sum(heights) + gap * sum(heights) / len(heights) * (len(rows) - 1)
+    avg = sum(heights) / len(heights)
+    gaps = []
+    for a, b, ha, hb in zip(out, out[1:], heights, heights[1:]):
+        g = gap * avg
+        if a[0]["style"] == "sub" and b[0]["style"] == "sub":      # small spaced lines need air between them
+            g = max(g, 0.8 * max(ha, hb))
+        gaps.append(g)
+    total = sum(heights) + sum(gaps)
     y = cy - total / 2
     runs = []
-    for (r, vis, text, size, lw), h in zip(out, heights):
+    for i, ((r, vis, text, size, lw), h) in enumerate(zip(out, heights)):
         base = y + h * 0.82
         x0 = (W - lw) / 2
         xs, _ = letter_layout(text, r["style"], size)
@@ -142,12 +149,35 @@ def layout_rows(rows, cy, maxw=1640, gap=0.32):
             runs.append({"text": w, "style": r["style"], "size": size, "x": x0 + xs[k], "base": base, "t": t,
                          "rgb": COLORS[r.get("color", "white")], "glow": r.get("color", "white") != "white"})
             k += len(w) + 1
-        y += h * (1 + gap)
+        if r.get("strike") and vis:                        # a red line struck through the row once it's said
+            runs.append({"strike": True, "x0": x0 - size * 0.15, "x1": x0 + lw + size * 0.15,
+                         "y": base - size * (0.36 if r["style"] == "big" else 0.37), "h": max(4, size * 0.11),
+                         "t": vis[-1][1] + 0.3})
+        y += h + (gaps[i] if i < len(gaps) else 0)
     return runs, cy - total / 2, cy + total / 2
+
+
+def draw_strike(frame, r, t, alpha=1.0):
+    p = (t - r["t"]) / 0.28
+    if p <= 0:
+        return
+    e = 1 - (1 - min(p, 1)) ** 3
+    x1 = r["x0"] + (r["x1"] - r["x0"]) * e
+    y0, y1 = int(r["y"] - r["h"] / 2), int(r["y"] + r["h"] / 2)
+    xa, xb = int(r["x0"]), int(x1)
+    if xb <= xa:
+        return
+    gl = frame[max(0, y0 - 10):y1 + 10, xa:xb]                 # soft red glow, then the line
+    gl *= 0.8
+    gl += np.array(RED, np.float32) * 0.2 * alpha
+    frame[y0:y1, xa:xb] = frame[y0:y1, xa:xb] * (1 - alpha) + np.array(RED, np.float32) * alpha
 
 
 def draw_runs(frame, runs, t, alpha=1.0):
     for r in runs:
+        if r.get("strike"):
+            draw_strike(frame, r, t, alpha)
+            continue
         stag = 0.03 if r["style"] == "big" else 0.022
         draw_letters(frame, r["text"], r["style"], r["size"], r["x"], r["base"], t, r["t"], r["rgb"], r["glow"],
                      stagger=stag, dur=0.3, blur=14 if r["style"] == "big" else 10, alpha=alpha)

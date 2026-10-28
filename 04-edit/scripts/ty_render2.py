@@ -92,6 +92,7 @@ class Scene:
             self.icon_y = top - 150
         elif k == "tiles":
             self.items = [(tile(i, lab), t) for i, lab, t in s["items"]]
+            self.runs = I.layout_rows(s["rows"], s.get("rows_cy", 760))[0] if s.get("rows") else []
         elif k == "app":
             self.imgs = [cached(("app", j), lambda j=j: I.framed(G.application_card(j / 5, blur=0, raw=True), 1180, 660, tilt=-6))
                          for j in range(6)]
@@ -137,7 +138,7 @@ class Scene:
         frame[:] = I.plate_at(self.plate, r / max(self.t1 - self.t0, 0.5))
         if k == "iman":
             if self.s.get("chart"):
-                p = clamp((r - 0.9) / 1.3)
+                p = clamp((r - self.s.get("chart_delay", 0.9)) / self.s.get("chart_dur", 1.3))
                 if p > 0:
                     m = chart_mask(ease_io(p))
                     core = np.asarray(m, np.float32)[..., None] / 255.0
@@ -158,12 +159,13 @@ class Scene:
                 x = W / 2
                 for m_ in range(j + 1, len(self.items) + 1):
                     tm = n_vis[m_ - 1]
-                    target = W / 2 + (j - (m_ - 1) / 2) * 420
+                    target = W / 2 + (j - (m_ - 1) / 2) * self.s.get("spacing", 420)
                     if m_ == j + 1:
                         x = target
                     elif t >= tm:
                         x = x + (target - x) * ease_io((t - tm) / 0.35)
-                draw_rise(frame, im, x, 500, t, ti, rise=50)
+                draw_rise(frame, im, x, self.s.get("tile_y", 500), t, ti, rise=50)
+            I.draw_runs(frame, self.runs, t)
         elif k in ("app", "email"):
             idx = min(5, int(clamp((r - 0.8) / 1.2) * 5)) if k == "app" else 0
             im = self.imgs[idx]
@@ -214,6 +216,8 @@ class Scene:
 
 
 def render(plan, base_path, out_path, f0, f1):
+    if plan.get("anchor"):                                  # where his face is (zoom centre)
+        R.CX, R.CY = plan["anchor"]
     zoom = R.Zoom(plan["zoom"])
     sweeps = Sweeps(plan["leaks"])
     scenes = [Scene(s) for s in plan["scenes"]]

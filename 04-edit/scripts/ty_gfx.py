@@ -79,6 +79,29 @@ def icon(name, size=150, stroke=0.055):
         line([(0.44, 0.82), (0.56, 0.82)])
         arc((0.4, 0.3, 0.6, 0.5), 300, 60); arc((0.46, 0.22, 0.74, 0.58), 300, 60)
         d.ellipse([v * n for v in (0.41, 0.36, 0.49, 0.44)], fill=255)
+    elif name == "note":                                  # music note (short-form apps)
+        d.ellipse([v * n for v in (0.18, 0.62, 0.42, 0.84)], outline=255, width=lw)
+        line([(0.42, 0.73), (0.42, 0.14), (0.78, 0.26)])
+    elif name == "camera":
+        line([(0.12, 0.3), (0.34, 0.3), (0.4, 0.2), (0.6, 0.2), (0.66, 0.3), (0.88, 0.3), (0.88, 0.8), (0.12, 0.8)], closed=True)
+        d.ellipse([v * n for v in (0.36, 0.4, 0.64, 0.68)], outline=255, width=lw)
+    elif name == "play":
+        line([(0.12, 0.22), (0.88, 0.22), (0.88, 0.78), (0.12, 0.78)], closed=True)
+        d.polygon([P(0.43, 0.37), P(0.43, 0.63), P(0.63, 0.5)], fill=255)
+    elif name == "box":
+        line([(0.5, 0.12), (0.86, 0.3), (0.86, 0.72), (0.5, 0.9), (0.14, 0.72), (0.14, 0.3)], closed=True)
+        line([(0.14, 0.3), (0.5, 0.48), (0.86, 0.3)]); line([(0.5, 0.48), (0.5, 0.9)])
+    elif name == "bag":
+        line([(0.18, 0.34), (0.82, 0.34), (0.86, 0.88), (0.14, 0.88)], closed=True)
+        arc((0.34, 0.12, 0.66, 0.52), 180, 360)
+    elif name == "chat":                                  # speech bubble with a question mark
+        line([(0.12, 0.18), (0.88, 0.18), (0.88, 0.7), (0.42, 0.7), (0.24, 0.86), (0.26, 0.7), (0.12, 0.7)], closed=True)
+        arc((0.4, 0.27, 0.6, 0.47), 200, 400)
+        line([(0.56, 0.44), (0.5, 0.5), (0.5, 0.54)])
+        d.ellipse([v * n for v in (0.475, 0.59, 0.525, 0.64)], fill=255)
+    elif name == "user":
+        d.ellipse([v * n for v in (0.34, 0.12, 0.66, 0.44)], outline=255, width=lw)
+        arc((0.16, 0.54, 0.84, 1.22), 180, 360)
     im = im.resize((size, size), Image.LANCZOS)
     out = Image.new("RGBA", (size, size), (255, 255, 255, 0))
     out.putalpha(im)
@@ -247,7 +270,7 @@ def main():
         np.save(f"{OUT}/bg_{nm}.npy", gradient(st).astype(np.float32))
     for nm, lab, ic in [("time", "Time", "hourglass"), ("location", "Location", "pin"), ("freedom", "Freedom", "diamond")]:
         dashed_circle(392, lab, ic).save(f"{OUT}/circle_{nm}.png")
-    for ic in ["mail", "calendar", "shield", "phone", "hourglass", "pin", "diamond"]:
+    for ic in ["mail", "calendar", "shield", "phone", "hourglass", "pin", "diamond", "note", "camera", "play", "box", "bag", "user", "chat"]:
         icon(ic, 170).save(f"{OUT}/icon_{ic}.png")
     for k in range(6):
         application_card(k / 5).save(f"{OUT}/app_{k}.png")

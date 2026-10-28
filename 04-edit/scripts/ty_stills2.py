@@ -7,6 +7,8 @@ import ty_render as R
 import ty_render2 as R2
 
 plan = json.load(open(sys.argv[1])); base = sys.argv[2]; od = sys.argv[3]
+if plan.get("anchor"):
+    R.CX, R.CY = plan["anchor"]
 zoom, sweeps = R.Zoom(plan["zoom"]), R2.Sweeps(plan["leaks"])
 scenes = [R2.Scene(s) for s in plan["scenes"]]
 caps = R.Captions(plan["captions"])

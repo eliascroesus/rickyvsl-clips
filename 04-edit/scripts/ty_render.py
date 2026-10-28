@@ -43,10 +43,12 @@ def ease_back(x, s=1.7):
 # ------------------------------------------------------------------ base A-roll
 def render_base(plan, out):
     inputs, chains, labels = [], [], []
+    raw = plan.get("raw", RAW)
     for i, (a, b) in enumerate(plan["keep"]):
         nf = round((b - a) * FPS)
-        inputs += ["-ss", f"{a:.4f}", "-i", RAW]
-        chains.append(f"[{i}:v]fps={FPS},trim=end_frame={nf},setpts=PTS-STARTPTS,{GRADE},format=yuv420p[s{i}]")
+        inputs += ["-ss", f"{a:.4f}", "-i", raw]
+        chains.append(f"[{i}:v]fps={FPS},trim=end_frame={nf},setpts=PTS-STARTPTS,scale={W}:{H}:flags=lanczos,{GRADE},"
+                      f"format=yuv420p[s{i}]")
         labels.append(f"[s{i}]")
     graph = ";".join(chains) + ";" + "".join(labels) + f"concat=n={len(labels)}:v=1:a=0[v]"
     subprocess.run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", graph, "-map", "[v]", "-c:v", "libx264",
