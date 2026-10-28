@@ -11,3 +11,9 @@ The reference thank-you video to copy 1:1 goes here.
   wait until it has finished uploading, then click **Publish release**.
 
 A line here on what you like about it (or the link it came from) helps.
+
+## Breakdown
+
+The uploaded reference (`abnasdaq-thankyou.mp4` in the release) is broken down in full in
+[THANK-YOU-BREAKDOWN.md](THANK-YOU-BREAKDOWN.md): captions, cards, light leaks, zooms, music, sound effects, a
+second-by-second timeline and the plan for copying it on Ricky's thank-you video.
