@@ -184,3 +184,37 @@ proof, and on his face the shot is never still: about 80% of face shots slowly p
 - **Colour fix (all renders from now on):** the compositor now converts to and tags HD colour (BT.709). Before, it
   wrote BT.601 without a tag, so browsers showed reds as orange (and every colour slightly off).
 - His diner clip (`02-results-and-b-roll/diner.mp4`, 2.2 s) pops up beside him on "dining server" with a soft thud.
+
+## Thank-you video, AB Nasdaq 1:1 (`scripts/ty_*.py`, plan in `thank-you/plan.json`)
+
+Ricky's raw thank-you video (`thank-you-raw-footage` release), edited to the measured breakdown of AB's thank-you video
+(`thank-you-vsl-reference/THANK-YOU-BREAKDOWN.md`).
+
+- **Cut:** pauses trimmed only where the audio is truly silent (1 s in total; his delivery is already tight at about 210 words a minute), 2:32.
+- **Captions:** AB's: bold white Inter Display (Fellix once the font files arrive), tight tracking, soft drop shadow,
+  low on the frame. 1–3 words, each rising in from grey to white as he says it. Off while a full-screen text card is up
+  (the card is the caption), on over the application card, the email card and the guru flicker. No sound.
+- **Cards** on AB's green gradient (#1F9233 → black), text built word by word in sync with his voice:
+  - "That 90% / of other dropshippers couldn't do";
+  - "Consistency / Sales", then the Time / Location / Freedom icon circles spinning in;
+  - "Countless other dropshippers / in the 1-on-1 Mentorship";
+  - "What are the / next steps to joining / the 1-on-1 Mentorship?";
+  - a blurred 1-on-1 Mentorship application form popping in;
+  - a "Confirm your 1-on-1 call" email popping in;
+  - calendar icon + "We only have a / Limited Number of Spots";
+  - his doubts as text ("If this is even something / that you can commit to, / or if it can even really work out?");
+  - the **red card** "The odds right now are / Stacked Against You" with the falling chart line;
+  - a flicker of 12 made-up "online guru" thumbnails (no real people), then "Just trying to push a course / in front
+    of your face";
+  - shield icon + "To Make You Bulletproof / from the ups and downs of Dropshipping";
+  - Ricky shrinking into a window over a scrolling wall of his own Shopify results (chargebacks and store name hidden)
+    with "A Profitable / Dropshipper";
+  - phone icon + "Be on the lookout / for that call from my team".
+- **Light leaks:** 27 warm film-burn flashes (procedural, our own), the cut under the brightest frame, on every card in
+  and out and to reset the zoom.
+- **Zooms:** opens at 1.5× and eases out; smooth 0.6–1.0 s pushes that stack in two steps to about 1.4× on his key lines,
+  reset with a flash or a smooth pull-out; calm stretches stay wide.
+- **Music:** original bed to AB's recipe (`scripts/ty_music.py`): G minor, 130 BPM, CC0 upright-piano arpeggio of fifths
+  and octaves (VSCO 2 CE) over a soft pad, bells from 0:14, a busier middle, a held high note into "however, on the flip
+  side", where a soft 808 on G1 comes in on every downbeat. Flat under the voice (no ducking), 0.5 s fade at the end.
+- **No sound effects**, like AB.
