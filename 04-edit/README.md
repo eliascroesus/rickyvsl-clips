@@ -218,3 +218,24 @@ Ricky's raw thank-you video (`thank-you-raw-footage` release), edited to the mea
   and octaves (VSCO 2 CE) over a soft pad, bells from 0:14, a busier middle, a held high note into "however, on the flip
   side", where a soft 808 on G1 comes in on every downbeat. Flat under the voice (no ducking), 0.5 s fade at the end.
 - **No sound effects**, like AB.
+
+## Thank-you video v2 (after review, `scripts/ty_plan2.py`, `ty_render2.py`, `ty_iman.py`, `ty_songbed.py`)
+
+- **Iman Gadzhi-style motion graphics instead of the green gradient**, in the look of the approved B5 cards:
+  - the near-black brand plate with the purple arc of light, drifting slowly;
+  - wide Unbounded caps that blur in letter by letter as Ricky says each word, with spaced sub lines and
+    purple accents;
+  - the small YTD mark;
+  - icons in glass tiles;
+  - the application form, email, guru thumbnails and his results in glowing tilted frames.
+- **The red card** ("STACKED AGAINST YOU.") sits on a red version of the plate, with a glowing red chart line falling
+  around the text.
+- Transitions are the same light flashes, now a clean purple-to-white light sweep in the brand colours.
+- **Zooms only with intent:** 8 slow pushes (1.6–2 s, 10–16 %) on his key lines: "one step away", "no reason why",
+  "phone in your hand", "locks in your spot", "personally mentoring you" / "exactly why I built", "however, on the
+  flip side", "financial freedom". Each one holds until the next card, so it never visibly zooms back out. The calm
+  parts stay wide.
+- **Music:** the boom-free "Me And The Devil" bed (`song_bed.py`'s de-boomed stem), one unbroken pass ending on the
+  song's real outro (no loop joins), about 15 dB under his voice. The song isn't in this public repo (copyright), and
+  using it in a paid ad needs a licence.
+- Captions, cuts and card timing as in v1.

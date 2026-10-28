@@ -53,7 +53,13 @@ def main():
     end_song = len(h) / SR
     need = total + 2.0
     best = None
-    for a1 in range(gi(160), gi(176) + 1):          # leave pass 1 here ...
+    if need < end_song - g0:                        # shorter than the song: one seamless skip, ending on the real outro
+        skip = int(round((end_song - g0 - need) / P))
+        for a1 in range(gi(30), gi(end_song - 30) - skip):
+            score = 2 * sim(a1, a1 + skip)
+            if best is None or score > best[0]:
+                best = (score, a1, a1 + skip, None, None)
+    for a1 in range(gi(160), gi(176) + 1) if best is None else []:   # leave pass 1 here ...
         for b in range(gi(10), gi(60) + 1):         # ... and jump back to here
             if sim(a1, b) < 0.85:
                 continue
@@ -66,7 +72,10 @@ def main():
                 if best is None or score > best[0]:
                     best = (score, a1, b, a2, b2)
     score, a1, b, a2, b2 = best
-    plan = [(g0, grid[a1]), (grid[b], grid[a2]), (grid[b2], end_song)]
+    if a2 is None:
+        plan = [(g0, grid[a1]), (grid[b], end_song)]
+    else:
+        plan = [(g0, grid[a1]), (grid[b], grid[a2]), (grid[b2], end_song)]
     xf = int(0.25 * SR)
     bed = np.zeros((0, 2))
     for s, e in plan:

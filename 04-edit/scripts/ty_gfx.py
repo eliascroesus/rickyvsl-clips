@@ -125,7 +125,7 @@ def rounded(im, radius):
 
 
 # ------------------------------------------------------------------ mock application form + email
-def application_card(filled=0.0):
+def application_card(filled=0.0, blur=2.6, raw=False):
     """White rounded card with the 1-on-1 Mentorship application, softly blurred like AB's screen recording.
     `filled` (0..1) types a name into the first field."""
     w, h = 1300, 700
@@ -146,11 +146,11 @@ def application_card(filled=0.0):
     d.rounded_rectangle((64, y + 20, w - 64, y + 100), 16, fill=(245, 205, 78))
     bimg, bp, ba = T.word_img("Submit Application", 34, path=T.SEMI, rgb=(60, 50, 20), shadow=False)
     im.paste(bimg, (int((w - T.width("Submit Application", 34, path=T.SEMI)) / 2) - bp, y + 40 - bp), bimg)
-    im = im.filter(ImageFilter.GaussianBlur(2.6))
-    return soft_shadow(rounded(im, 34), 34)
+    im = im.filter(ImageFilter.GaussianBlur(blur)) if blur else im
+    return im if raw else soft_shadow(rounded(im, 34), 34)
 
 
-def email_card():
+def email_card(blur=1.2, raw=False):
     """Inbox mock: 'Confirm your 1-on-1 call' email with a big confirm button."""
     w, h = 1240, 640
     im = Image.new("RGB", (w, h), (255, 255, 255))
@@ -170,8 +170,8 @@ def email_card():
     d.rounded_rectangle((bx0, by0, bx1, by1), 18, fill=(31, 146, 51))
     b, bp, ba = T.word_img("Confirm my call", 40, rgb=(255, 255, 255), shadow=False)
     im.paste(b, (int((bx0 + bx1 - T.width("Confirm my call", 40)) / 2) - bp, by0 + 26 - bp), b)
-    im = im.filter(ImageFilter.GaussianBlur(1.2))
-    return soft_shadow(rounded(im, 34), 34)
+    im = im.filter(ImageFilter.GaussianBlur(blur)) if blur else im
+    return im if raw else soft_shadow(rounded(im, 34), 34)
 
 
 # ------------------------------------------------------------------ "online guru" thumbnails (no real people)
@@ -191,7 +191,7 @@ GURU = [
 ]
 
 
-def guru_thumb(i, w=1200, h=675):
+def guru_thumb(i, w=1200, h=675, raw=False):
     a, b, fg, bg, deco = GURU[i]
     rng = np.random.default_rng(i)
     im = Image.new("RGB", (w, h), bg)
@@ -224,7 +224,7 @@ def guru_thumb(i, w=1200, h=675):
     d.rounded_rectangle((w - 150, h - 76, w - 22, h - 22), 10, fill=(0, 0, 0))
     f = T.font(34, T.SEMI)
     d.text((w - 136, h - 70), f"{rng.integers(8, 59)}:{rng.integers(10, 59)}", font=f, fill=(255, 255, 255))
-    return rounded(im, 28)
+    return im if raw else rounded(im, 28)
 
 
 # ------------------------------------------------------------------ results tiles (Ricky's own Shopify proof)
@@ -247,7 +247,7 @@ def main():
         np.save(f"{OUT}/bg_{nm}.npy", gradient(st).astype(np.float32))
     for nm, lab, ic in [("time", "Time", "hourglass"), ("location", "Location", "pin"), ("freedom", "Freedom", "diamond")]:
         dashed_circle(392, lab, ic).save(f"{OUT}/circle_{nm}.png")
-    for ic in ["mail", "calendar", "shield", "phone", "hourglass"]:
+    for ic in ["mail", "calendar", "shield", "phone", "hourglass", "pin", "diamond"]:
         icon(ic, 170).save(f"{OUT}/icon_{ic}.png")
     for k in range(6):
         application_card(k / 5).save(f"{OUT}/app_{k}.png")
