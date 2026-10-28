@@ -26,6 +26,7 @@ then click **Publish release**:
 | Raw VSL footage | [releases/new?tag=raw-vsl-footage](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=raw-vsl-footage&title=Raw%20VSL%20footage) |
 | Thank-you VSL reference | [releases/new?tag=thank-you-vsl-reference](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=thank-you-vsl-reference&title=Thank-you%20VSL%20reference) |
 | Thank-you raw footage | [releases/new?tag=thank-you-raw-footage](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=thank-you-raw-footage&title=Thank-you%20raw%20footage) |
+| FAQ raw footage | [releases/new?tag=faq-raw-footage](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=faq-raw-footage&title=FAQ%20raw%20footage) |
 
 To add more videos to a release later, open it under **Releases**, click the pencil (Edit), attach the
 files and click **Update release**. Files over 2 GB need to be split or exported smaller first.
