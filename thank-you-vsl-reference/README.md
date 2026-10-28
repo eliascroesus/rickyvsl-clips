@@ -1,0 +1,13 @@
+# Thank-you VSL reference
+
+The reference thank-you video to copy 1:1 goes here.
+
+- **Small files (under 25 MB):** open this folder on GitHub, click **Add file → Upload files**, drag the file in and
+  click **Commit changes**. Direct link:
+  [upload to this folder](https://github.com/eliascroesus/rickyvsl-clips/upload/claude/nice-rubin-bayjpu/thank-you-vsl-reference).
+- **The video itself (up to 2 GB):** use the
+  [Thank-you VSL reference release](https://github.com/eliascroesus/rickyvsl-clips/releases/new?tag=thank-you-vsl-reference&title=Thank-you%20VSL%20reference)
+  (if GitHub asks about the tag, pick **Create new tag … on publish**), drag the video into the box at the bottom,
+  wait until it has finished uploading, then click **Publish release**.
+
+A line here on what you like about it (or the link it came from) helps.
